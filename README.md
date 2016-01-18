@@ -1,4 +1,4 @@
-# RawgentoDb
+# RawgentoDB
 
 Interact with a Magento MySQL database, using assumptions of a specific installation
 
@@ -24,11 +24,11 @@ Or install it yourself as:
 
 Edit rawgento_db-config.yml to your needs.
 
-host: 127.0.0.1
-port: 3306
-database: mydb
-username: myuser
-password: mysecret
+    host: 127.0.0.1
+    port: 3306
+    database: mydb
+    username: myuser
+    password: mysecret
 
 ## Development
 
