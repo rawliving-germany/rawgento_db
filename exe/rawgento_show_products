@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "rawgento_db"
+require 'terminal-table'
+
+products = RawgentoDB::Query.products(RawgentoDB.settings)
+puts Terminal::Table.new :headings => ['Product ID', 'Name'], :rows => products
+

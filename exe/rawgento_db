@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 
 require "rawgento_db"
+
+puts RawgentoDB::Query.products(RawgentoDB.settings).inspect
