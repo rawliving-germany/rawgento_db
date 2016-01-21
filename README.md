@@ -42,7 +42,7 @@ The later keys define the attribute-id of some more or less custom attributes.
 `RawgentoDB` defines the following methods:
 
   - `RawgetoDB.settings`: Reads the aforementioned config file and returns its values (a hash). The settings are needed for all the other operations.
-  - `RawgentoDB::Query.products`: Returns an array of Struct(:product_id, :name)s containing most basic Product information
+  - `RawgentoDB::Query.products`: Returns an array of Struct(:product_id, '')s containing the product_id (unfortunately, name is not easily accessible atm).
   - `RawgentoDB::Query.stock`: Returns am array of Struct(:product_id, :qty)s containing current stock per product.
   - `RawgentoDB::Query.sales(product_id, settings)`: Returns array of [period, qty_ordered] information for one product.
   - `RawgentoDB::Query.attribute_varchar(attribute_id, settings)`: Returns array of [product_id, attribute_value] varchar-attribute-value information for all products.
