@@ -6,16 +6,16 @@ module RawgentoDB
 
   class Query
     def self.client settings
+      # Pick up a memoized settings?
       Mysql2::Client.new settings
     end
 
     def self.products settings
-      result = client(settings).query('SELECT product_id, name '\
-                                      'FROM cataloginventory_stock_item csi'\
-                                      '  JOIN catalog_product_flat_1 cpf ON'\
-                                      '    csi.product_id=cpf.entity_id')
+      # Unfortunately, name is an own attribute in different table.
+      result = client(settings).query('SELECT entity_id '\
+                                      'FROM catalog_product_entity')
       result.map do |r|
-        Product.new r["product_id"], r["name"]
+        Product.new r["entity_id"], r[""]
       end
     end
 
@@ -33,6 +33,29 @@ module RawgentoDB
                                       ' WHERE product_id = %d ORDER BY period DESC' % product_id)
       result.map do |r|
         [r['period'], "%1.0f" % r['qty_ordered']]
+      end
+    end
+
+    def self.attribute_varchar attribute_id, settings
+      result = client(settings).query("
+        SELECT entity_id, value
+        FROM catalog_product_entity_varchar
+        WHERE attribute_id=#{attribute_id};")
+      result.map do |r|
+        [r['entity_id'], r['value']]
+      end
+    end
+
+    def self.attribute_option attribute_id, settings
+      # Join
+      result = client(settings).query("
+        SELECT optchoice.entity_id, optval.value
+        FROM eav_attribute_option_value as optval,
+             catalog_product_entity_int as optchoice
+        WHERE optchoice.attribute_id=#{attribute_id}
+              AND optval.option_id=optchoice.value;")
+      result.map do |r|
+        [r['entity_id'], r['value']]
       end
     end
   end
