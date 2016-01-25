@@ -1,6 +1,6 @@
 # RawgentoDB
 
-Interact with a Magento MySQL database, using assumptions of a specific installation
+Interact with a Magento MySQL database, using assumptions of a specific installation.
 
 ## Installation
 
@@ -28,14 +28,8 @@ Edit rawgento_db-config.yml to your needs.
     database: mydb
     username: myuser
     password: mysecret
-    attributes:
-      shelve_nr: 828
-      supplier_name: 921
-      packsize: 9291
-      name: 283
 
 The first 5 keys define access to the mysql (magento) database.
-The later keys define the attribute-id of some more or less custom attributes.
 
 ## Usage
 
@@ -44,7 +38,9 @@ The later keys define the attribute-id of some more or less custom attributes.
   - `RawgetoDB.settings`: Reads the aforementioned config file and returns its values (a hash). The settings are needed for all the other operations.
   - `RawgentoDB::Query.products`: Returns an array of Struct(:product_id, '')s containing the product_id (unfortunately, name is not easily accessible atm).
   - `RawgentoDB::Query.stock`: Returns am array of Struct(:product_id, :qty)s containing current stock per product.
-  - `RawgentoDB::Query.sales(product_id, settings)`: Returns array of [period, qty_ordered] information for one product.
+  - `RawgentoDB::Query.understock(settings)`: Returns array of [product_id, qty, min_qty] for products with notify_min_stock smaller than current stock.
+  - `RawgentoDB::Query.sales_monthly(product_id, settings)`: Returns array of [period, qty_ordered] information for one product.
+  - `RawgentoDB::Query.sales_daily(product_id, settings)`: Returns array of [period, qty_ordered] information for one product.
   - `RawgentoDB::Query.attribute_varchar(attribute_id, settings)`: Returns array of [product_id, attribute_value] varchar-attribute-value information for all products.
   - `RawgentoDB::Query.attribute_option(attribute_id, settings)`: Returns array of [product_id, attribute_value] attribute-value of an option for all products.
 

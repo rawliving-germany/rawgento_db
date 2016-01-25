@@ -27,9 +27,29 @@ module RawgentoDB
       end
     end
 
-    def self.sales product_id, settings
+    def self.understocked settings
+      results = client(settings).query(
+        "SELECT product_id, qty, notify_stock_qty "\
+        "FROM cataloginventory_stock_item "\
+        "WHERE notify_stock_qty > qty;")
+      results.map do |row|
+        [row['product_id'], row['name'],
+         row['notify_stock_qty'], row['qty']]
+      end
+    end
+
+    def self.sales_monthly product_id, settings
       result = client(settings).query('SELECT * '\
                                       'FROM sales_bestsellers_aggregated_monthly '\
+                                      ' WHERE product_id = %d ORDER BY period DESC' % product_id)
+      result.map do |r|
+        [r['period'], "%1.0f" % r['qty_ordered']]
+      end
+    end
+
+    def self.sales_daily product_id, settings
+      result = client(settings).query('SELECT * '\
+                                      'FROM sales_bestsellers_aggregated_daily '\
                                       ' WHERE product_id = %d ORDER BY period DESC' % product_id)
       result.map do |r|
         [r['period'], "%1.0f" % r['qty_ordered']]
