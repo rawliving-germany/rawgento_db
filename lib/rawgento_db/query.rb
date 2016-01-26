@@ -5,12 +5,12 @@ module RawgentoDB
   ProductQty = Struct.new(:product_id, :qty)
 
   class Query
-    def self.client settings
+    def self.client settings=RawgentoDB.settings
       # Pick up a memoized settings?
       Mysql2::Client.new settings
     end
 
-    def self.products settings
+    def self.products settings=RawgentoDB.settings
       # Unfortunately, name is an own attribute in different table.
       result = client(settings).query('SELECT entity_id '\
                                       'FROM catalog_product_entity')
@@ -19,7 +19,7 @@ module RawgentoDB
       end
     end
 
-    def self.stock settings
+    def self.stock settings=RawgentoDB.settings
       result = client(settings).query('SELECT product_id, qty '\
                                       'FROM cataloginventory_stock_item ')
       result.map do |r|
@@ -27,7 +27,7 @@ module RawgentoDB
       end
     end
 
-    def self.understocked settings
+    def self.understocked settings=RawgentoDB.settings
       results = client(settings).query(
         "SELECT product_id, qty, notify_stock_qty "\
         "FROM cataloginventory_stock_item "\
@@ -38,7 +38,7 @@ module RawgentoDB
       end
     end
 
-    def self.sales_monthly product_id, settings
+    def self.sales_monthly product_id, settings=RawgentoDB.settings
       result = client(settings).query('SELECT * '\
                                       'FROM sales_bestsellers_aggregated_monthly '\
                                       ' WHERE product_id = %d ORDER BY period DESC' % product_id)
@@ -47,7 +47,7 @@ module RawgentoDB
       end
     end
 
-    def self.sales_daily product_id, settings
+    def self.sales_daily product_id, settings=RawgentoDB.settings
       result = client(settings).query('SELECT * '\
                                       'FROM sales_bestsellers_aggregated_daily '\
                                       ' WHERE product_id = %d ORDER BY period DESC' % product_id)
@@ -56,7 +56,7 @@ module RawgentoDB
       end
     end
 
-    def self.attribute_varchar attribute_id, settings
+    def self.attribute_varchar attribute_id, settings=RawgentoDB.settings
       result = client(settings).query("
         SELECT entity_id, value
         FROM catalog_product_entity_varchar
@@ -66,7 +66,7 @@ module RawgentoDB
       end
     end
 
-    def self.attribute_option attribute_id, settings
+    def self.attribute_option attribute_id, settings=RawgentoDB.settings
       # Join
       result = client(settings).query("
         SELECT optchoice.entity_id, optval.value

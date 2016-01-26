@@ -44,6 +44,8 @@ The first 5 keys define access to the mysql (magento) database.
   - `RawgentoDB::Query.attribute_varchar(attribute_id, settings)`: Returns array of [product_id, attribute_value] varchar-attribute-value information for all products.
   - `RawgentoDB::Query.attribute_option(attribute_id, settings)`: Returns array of [product_id, attribute_value] attribute-value of an option for all products.
 
+All of these can optionally be called with a (second) parameter settings, which is the yaml parsed file.  To initialize the settings, call `RawgentoDB.settings filename`.
+
 
 Furthermore, some command line applications are provided to get a view on the Shop through the eyes of the `rawgento_db` gem:
 
