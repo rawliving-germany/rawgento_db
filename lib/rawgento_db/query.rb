@@ -38,6 +38,24 @@ module RawgentoDB
       end
     end
 
+    # Newer version might require query via entity_id
+    # array('aggregation' => $collection->getResource()->getTable('sales/bestsellers_aggregated_monthly')),
+    #       "e.entity_id = aggregation.product_id AND aggregation.store_id={$storeId} AND aggregation.period BETWEEN '{$fromDate}' AND '{$toDate}'",
+    #       array('SUM(aggregation.qty_ordered) AS sold_quantity')
+
+    def self.sales_daily_between product_id, from_date, to_date, settings=RawgentoDB.settings
+      min_date, max_date = [from_date, to_date].minmax
+      query = 'SELECT * '\
+              'FROM sales_bestsellers_aggregated_daily '\
+              'WHERE product_id = %d AND '\
+              'period >= \'%s\' AND period <= \'%s\' '\
+              'ORDER BY PERIOD DESC' % [product_id, min_date.strftime, max_date.strftime]
+      result = client(settings).query(query)
+      result.map do |r|
+        [r['period'], "%1.0f" % r['qty_ordered']]
+      end
+    end
+
     def self.sales_monthly product_id, settings=RawgentoDB.settings
       result = client(settings).query('SELECT * '\
                                       'FROM sales_bestsellers_aggregated_monthly '\
