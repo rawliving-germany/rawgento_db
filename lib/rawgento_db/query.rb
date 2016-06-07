@@ -38,6 +38,26 @@ module RawgentoDB
       end
     end
 
+    def self.update_stock product_id, stock_addition, settings=RawgentoDB.settings
+      results = client(settings).query(
+        "UPDATE cataloginventory_stock_item SET qty = qty + %f "\
+        "WHERE product_id = %d", [stock_addition, product_id])
+    end
+
+    def self.set_available_on_stock product_id, settings=RawgentoDB.settings
+      result = client(settings).query(
+        "SELECT is_in_stock FROM cataloginventory_stock_item "\
+        "WHERE product_id = %d AND is_in_stock = 0 AND qty > 0", product_id)
+      if result.length && result[0] == 0
+        result = client(settings).query(
+          "UPDATE cataloginventory_stock_item SET is_in_stock = 1 "\
+          "WHERE product_id = %d", product_id)
+        result
+      else
+        "unclear what happened"
+      end
+    end
+
     # Newer version might require query via entity_id
     # array('aggregation' => $collection->getResource()->getTable('sales/bestsellers_aggregated_monthly')),
     #       "e.entity_id = aggregation.product_id AND aggregation.store_id={$storeId} AND aggregation.period BETWEEN '{$fromDate}' AND '{$toDate}'",
