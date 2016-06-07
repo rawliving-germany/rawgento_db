@@ -76,6 +76,19 @@ module RawgentoDB
       end
     end
 
+    def self.sales_monthly_between product_id, from_date, to_date, settings=RawgentoDB.settings
+      min_date, max_date = [from_date, to_date].minmax
+      query = 'SELECT DISTINCT * '\
+              'FROM sales_bestsellers_aggregated_monthly '\
+              'WHERE product_id = %d AND '\
+              'period >= \'%s\' AND period <= \'%s\' '\
+              'ORDER BY period DESC' % [product_id, min_date.strftime, max_date.strftime]
+      result = client(settings).query(query)
+      result.map do |r|
+        [r['period'], "%1.0f" % r['qty_ordered']]
+      end#.uniq
+    end
+
     def self.sales_monthly product_id, settings=RawgentoDB.settings
       result = client(settings).query('SELECT * '\
                                       'FROM sales_bestsellers_aggregated_monthly '\
