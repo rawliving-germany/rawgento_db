@@ -107,6 +107,19 @@ module RawgentoDB
       end
     end
 
+    def self.num_sales_since day, product_ids, settings=RawgentoDB.settings
+      query = "SELECT SUM(qty_ordered), product_id "\
+              "FROM sales_bestsellers_aggregated_daily "\
+              "WHERE product_id in (%s) "\
+              "  AND period >= '%s' "\
+              "GROUP BY product_id" % [product_ids.join(","), day.strftime]
+
+      result = client(settings).query(query)
+      result.map do |r|
+        [r['product_id'], r['SUM(qty_ordered)'].to_i]
+      end.to_h
+    end
+
     def self.attribute_varchar attribute_id, settings=RawgentoDB.settings
       result = client(settings).query("
         SELECT entity_id, value
