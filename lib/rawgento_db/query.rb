@@ -130,6 +130,15 @@ module RawgentoDB
       end
     end
 
+    def self.product_names product_ids=nil, settings=RawgentoDB.settings
+      where = product_ids.nil? ? "" : " WHERE entity_id IN (#{product_ids.join(', ')})"
+      query = "SELECT entity_id, name FROM catalog_product_flat_1 #{where};"
+      result = client(settings).query(query)
+      result.map do |r|
+        [r['entity_id'], r['name']]
+      end.to_h
+    end
+
     def self.attribute_option attribute_id, settings=RawgentoDB.settings
       # Join
       result = client(settings).query("
