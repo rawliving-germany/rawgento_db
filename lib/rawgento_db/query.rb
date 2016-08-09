@@ -127,7 +127,7 @@ module RawgentoDB
 
       result = client(settings).query(query)
       result.map do |r|
-        [r['product_id'], r['SUM(qty_ordered)'].to_i]
+        [r['product_id'], ProductQty.new(r['product_id'], r['SUM(qty_ordered)'].to_i)]
       end.to_h
     end
 
