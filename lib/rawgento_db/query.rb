@@ -107,6 +107,17 @@ module RawgentoDB
       end
     end
 
+    def self.first_sales product_ids, settings=RawgentoDB.settings
+      query = "SELECT MIN(period), product_id "\
+              "FROM sales_bestsellers_aggregated_daily "\
+              "WHERE product_id in (%s) "\
+              "GROUP BY product_id" % [product_ids.join(",")]
+      result = client(settings).query(query)
+      result.map do |r|
+        [r['product_id'], r['MIN(period)']]
+      end.to_h
+    end
+
     def self.num_sales_since day, product_ids, settings=RawgentoDB.settings
       query = "SELECT SUM(qty_ordered), product_id "\
               "FROM sales_bestsellers_aggregated_daily "\
