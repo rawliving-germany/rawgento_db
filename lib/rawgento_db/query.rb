@@ -156,6 +156,16 @@ module RawgentoDB
       end.to_h
     end
 
+    def self.attribute_int attribute_id, settings=RawgentoDB.settings
+      result = client(settings).query("
+        SELECT entity_id, value
+        FROM catalog_product_entity_int
+        WHERE attribute_id=#{attribute_id};")
+      result.map do |r|
+        [r['entity_id'], r['value']]
+      end
+    end
+
     def self.attribute_option attribute_id, settings=RawgentoDB.settings
       # Join
       result = client(settings).query("
