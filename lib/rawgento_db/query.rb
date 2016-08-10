@@ -58,6 +58,12 @@ module RawgentoDB
       end
     end
 
+    def self.wrongly_not_in_stock settings=RawgentoDB.settings
+      query = "SELECT product_id FROM rlg15.cataloginventory_stock_item WHERE qty > 0 AND is_in_stock = 0;"
+      results = client(settings).query query
+      results.map{|r| r['product_id']}
+    end
+
     # Newer version might require query via entity_id
     # array('aggregation' => $collection->getResource()->getTable('sales/bestsellers_aggregated_monthly')),
     #       "e.entity_id = aggregation.product_id AND aggregation.store_id={$storeId} AND aggregation.period BETWEEN '{$fromDate}' AND '{$toDate}'",
