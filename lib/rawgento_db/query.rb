@@ -39,6 +39,9 @@ module RawgentoDB
     end
 
     def self.update_stock product_id, stock_addition, settings=RawgentoDB.settings
+      if stock_addition.to_i == 0
+        return
+      end
       results = client(settings).query(
         "UPDATE cataloginventory_stock_item SET qty = qty + %f "\
         "WHERE product_id = %d" % [stock_addition, product_id])
