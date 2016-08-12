@@ -41,7 +41,7 @@ module RawgentoDB
     def self.update_stock product_id, stock_addition, settings=RawgentoDB.settings
       results = client(settings).query(
         "UPDATE cataloginventory_stock_item SET qty = qty + %f "\
-        "WHERE product_id = %d", [stock_addition, product_id])
+        "WHERE product_id = %d" % [stock_addition, product_id])
     end
 
     def self.set_available_on_stock product_id, settings=RawgentoDB.settings
