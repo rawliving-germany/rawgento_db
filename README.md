@@ -33,6 +33,8 @@ The first 5 keys define access to the mysql (magento) database.
 
 ## Usage
 
+Note that **RawgentoDB does not make any effort to sanitize your input**, which means that crazy and dangerous things can be made with it.
+
 `RawgentoDB` defines the following methods:
 
   - `RawgetoDB.settings`: Reads the aforementioned config file and returns its values (a hash). The settings are needed for all the other operations.
