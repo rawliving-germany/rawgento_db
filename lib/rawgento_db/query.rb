@@ -52,7 +52,7 @@ module RawgentoDB
       result = client(settings).query(
         "SELECT is_in_stock FROM cataloginventory_stock_item "\
         "WHERE product_id = %d AND is_in_stock = 0 AND qty > 0" % product_id)
-      if result && result.length && result[0] == 0
+      if result && result.size > 0 && result[0] == 0
         result = client(settings).query(
           "UPDATE cataloginventory_stock_item SET is_in_stock = 1 "\
           "WHERE product_id = %d" % product_id)
