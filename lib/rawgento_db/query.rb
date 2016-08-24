@@ -31,7 +31,7 @@ module RawgentoDB
       results = client(settings).query(
         "SELECT product_id, qty, notify_stock_qty "\
         "FROM cataloginventory_stock_item "\
-        "WHERE notify_stock_qty > qty;")
+        "WHERE notify_stock_qty > qty OR notify_stock_qty IS NULL;")
       results.map do |row|
         [row['product_id'], row['name'],
          row['notify_stock_qty'], row['qty']]
