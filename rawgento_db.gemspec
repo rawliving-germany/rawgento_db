@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = RawgentoDB::VERSION
   spec.authors       = ["Felix Wolfsteller"]
   spec.email         = ["felix.wolfsteller@gmail.com"]
+  spec.license       = "GPL-3.0+"
 
   spec.summary       = %q{Braindead magento mysql interface}
 
