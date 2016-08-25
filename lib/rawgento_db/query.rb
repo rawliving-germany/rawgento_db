@@ -78,6 +78,7 @@ module RawgentoDB
       query = 'SELECT * '\
               'FROM sales_bestsellers_aggregated_daily '\
               'WHERE product_id = %d AND '\
+              'store_id = 1 AND '\
               'period >= \'%s\' AND period <= \'%s\' '\
               'ORDER BY PERIOD DESC' % [product_id, min_date.strftime, max_date.strftime]
       result = client(settings).query(query)
@@ -91,6 +92,7 @@ module RawgentoDB
       query = 'SELECT DISTINCT * '\
               'FROM sales_bestsellers_aggregated_monthly '\
               'WHERE product_id = %d AND '\
+              'store_id = 1 AND '\
               'period >= \'%s\' AND period <= \'%s\' '\
               'ORDER BY period DESC' % [product_id, min_date.strftime, max_date.strftime]
       result = client(settings).query(query)
@@ -121,7 +123,7 @@ module RawgentoDB
       query = "SELECT MIN(period), product_id "\
               "FROM sales_bestsellers_aggregated_daily "\
               "WHERE product_id in (%s) "\
-              "GROUP BY product_id" % [product_ids.join(",")]
+              "GROUP BY product_id" % [[*product_ids].join(",")]
       result = client(settings).query(query)
       result.map do |r|
         [r['product_id'], r['MIN(period)']]
@@ -133,7 +135,8 @@ module RawgentoDB
               "FROM sales_bestsellers_aggregated_daily "\
               "WHERE product_id in (%s) "\
               "  AND period >= '%s' "\
-              "GROUP BY product_id" % [product_ids.join(","), day.strftime]
+              "  AND store_id = 1 "\
+              "GROUP BY product_id" % [[*product_ids].join(","), day.strftime]
 
       result = client(settings).query(query)
       result.map do |r|
