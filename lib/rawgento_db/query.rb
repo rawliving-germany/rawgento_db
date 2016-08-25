@@ -56,12 +56,22 @@ module RawgentoDB
         "WHERE product_id = %d" % [stock_addition, product_id])
     end
 
+    #def self.update_stock product_stock, settings=RawgentoDB.settings
+    #  results = client(settings).query()
+    #  # UPDATE cataloginventory_stock_item SET qty = CASE
+    #  # WHEN id = 1 THEN qty + f
+    #  # WHEN id = 2 THEN ‘War and Peace’
+    #  # ...
+    #  # END
+    #  # WHERE id IN (1,2,...)
+    #end
+
     # One-way ticket: Do set available if qty > 0 (but not unavailable if <= 0).
     def self.set_available_on_stock product_id, settings=RawgentoDB.settings
       result = client(settings).query(
         "SELECT is_in_stock FROM cataloginventory_stock_item "\
         "WHERE product_id = %d AND is_in_stock = 0 AND qty > 0" % product_id)
-      if result && result.size > 0 && result[0] == 0
+      if result && result.size > 0 #&& result[0] == 0
         result = client(settings).query(
           "UPDATE cataloginventory_stock_item SET is_in_stock = 1 "\
           "WHERE product_id = %d" % product_id)
