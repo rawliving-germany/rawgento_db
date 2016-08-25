@@ -27,6 +27,15 @@ module RawgentoDB
       end
     end
 
+    def self.stock_for product_ids, settings=RawgentoDB.settings
+      result = client(settings).query('SELECT product_id, qty '\
+                                      'FROM cataloginventory_stock_item '\
+                                      "WHERE product_id IN (#{[*product_ids].join(', ')})")
+      result.map do |r|
+        ProductQty.new r["product_id"], r["qty"].to_i
+      end
+    end
+
     def self.understocked settings=RawgentoDB.settings
       results = client(settings).query(
         "SELECT product_id, qty, notify_stock_qty "\
