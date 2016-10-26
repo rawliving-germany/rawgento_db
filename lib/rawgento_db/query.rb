@@ -47,6 +47,17 @@ module RawgentoDB
       end
     end
 
+    def self.notify_stock_qty_for settings=RawgentoDB.settings, product_ids
+      results = client(settings).query(
+        "SELECT product_id, notify_stock_qty "\
+        "FROM cataloginventory_stock_item "\
+      "WHERE product_id IN (#{product_ids.join(', ')});")
+      results.map do |row|
+        [row['product_id'],
+         row['notify_stock_qty']]
+      end
+    end
+
     def self.update_stock product_id, stock_addition, settings=RawgentoDB.settings
       if stock_addition.to_i == 0
         return
