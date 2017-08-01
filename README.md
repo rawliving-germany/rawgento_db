@@ -1,6 +1,6 @@
 # RawgentoDB
 
-Interact with a Magento MySQL database, using assumptions of a specific installation.
+Interact with a Magento MySQL database, using assumptions of a specific installation (magento 1.5 system).
 
 ## Installation
 
@@ -33,6 +33,8 @@ The first 5 keys define access to the mysql (magento) database.
 
 ## Usage
 
+All of RawgentoDBs functionality is exposed to be used Module-style.
+
 Note that **RawgentoDB does not make any effort to sanitize your input**, which means that crazy and dangerous things can be made with it.
 
 `RawgentoDB` defines the following methods:
@@ -46,12 +48,18 @@ Note that **RawgentoDB does not make any effort to sanitize your input**, which 
   - `RawgentoDB::Query.attribute_varchar(attribute_id, settings)`: Returns array of [product_id, attribute_value] varchar-attribute-value information for all products.
   - `RawgentoDB::Query.attribute_option(attribute_id, settings)`: Returns array of [product_id, attribute_value] attribute-value of an option for all products.
 
-All of these can optionally be called with a (second) parameter settings, which is the yaml parsed file.  To initialize the settings, call `RawgentoDB.settings filename`.
+All of these can optionally be called with a (second) parameter settings, which is the yaml parsed file.  To initialize the settings, call `RawgentoDB.settings filename`. Otherwise, on the first call, RawgentoDB will read in and memoize `rawgento_db-config.yml` from the current directory.
 
 
 Furthermore, some command line applications are provided to get a view on the Shop through the eyes of the `rawgento_db` gem:
 
   - `rawgento_show_products`: Shows a table of products.
+
+### Return values
+
+Currently, RawgentoDB defines two own return types, `Product` and `ProdoctQty`.
+
+### Alternative Interface for connection sharing
 
 ## Development
 
