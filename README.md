@@ -1,6 +1,8 @@
 # RawgentoDB
 
-Interact with a Magento MySQL database, using assumptions of a specific installation (magento 1.5 system).
+** Work in progress to be magento2 compatible **
+
+Interact with a Magento MySQL database, using assumptions of a specific installation.
 
 ## Installation
 
