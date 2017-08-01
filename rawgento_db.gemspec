@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["felix.wolfsteller@gmail.com"]
   spec.license       = "GPL-3.0+"
 
-  spec.summary       = %q{Braindead magento mysql interface}
+  spec.summary       = %q{Braindead magento2 mysql interface}
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
